@@ -55,14 +55,15 @@ const VideoPlayer = (props: IVideoPlayer): JSX.Element => {
     if (videoRef.current) {
       if (videoRef.current.requestFullscreen) {
         videoRef.current.requestFullscreen();
-      } else if (videoRef?.current?.mozRequestFullScreen) {
-        videoRef.current.mozRequestFullScreen();
-      } else if (videoRef?.current?.webkitRequestFullscreen) {
-        videoRef.current?.webkitRequestFullscreen();
-      } else if (videoRef?.current?.msRequestFullscreen) {
-        videoRef.current?.msRequestFullscreen();
       }
     }
+    //   } else if (videoRef?.current?.mozRequestFullScreen) {
+    //     videoRef.current.mozRequestFullScreen();
+    //   } else if (videoRef?.current?.webkitRequestFullscreen) {
+    //     videoRef.current?.webkitRequestFullscreen();
+    //   } else if (videoRef?.current?.msRequestFullscreen) {
+    //     videoRef.current?.msRequestFullscreen();
+    //   }
   };
 
   const formatTime = (time: number) => {
