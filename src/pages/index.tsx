@@ -1,14 +1,16 @@
-import VideoPlayer from "@vb/components/videoPlayer/videoPlayer";
+import Playlist from "@vb/components/playlist/playlist";
+import { mediaJSON } from "@vb/data/mediaData";
+import Router from "next/router";
 
 export default function Home() {
+  const handleClick = (id: number) => {
+    Router.push(`/watch/${id}`);
+  };
+
   return (
     <main>
       <div>
-        <VideoPlayer
-          source="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-          width="500"
-          height="500"
-        />
+        <Playlist videos={mediaJSON.videos} playVideo={handleClick} />
       </div>
     </main>
   );

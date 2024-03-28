@@ -1,16 +1,30 @@
+import { IVideo } from "@vb/types/video";
 import React, { useState, useRef, useEffect } from "react";
-import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
+import {
+  AiFillPlayCircle,
+  AiFillPauseCircle,
+  AiOutlineFullscreenExit,
+  AiOutlineFullscreen,
+} from "react-icons/ai";
 
 interface IVideoPlayer {
-  source: string;
+  videoData: IVideo;
   width: string;
   height: string;
+  id?: number;
 }
 
-const VideoPlayer = (props: IVideoPlayer): JSX.Element => {
-  const { source, width, height } = props;
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+interface HTMLVideoElementRef extends HTMLVideoElement {
+  mozRequestFullScreen?: () => Promise<void>;
+  webkitRequestFullscreen?: () => Promise<void>;
+  msRequestFullscreen?: () => Promise<void>;
+}
+
+const Player = (props: IVideoPlayer): JSX.Element => {
+  const { videoData, width, height } = props;
+  const videoRef = useRef<HTMLVideoElementRef | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -41,13 +55,13 @@ const VideoPlayer = (props: IVideoPlayer): JSX.Element => {
   }, []);
 
   const handlePlayPause = () => {
-    if (videoRef?.current?.paused) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    } else {
-      videoRef?.current?.pause();
-      setIsPlaying(false);
-    }
+    // if (videoRef?.current?.paused) {
+    //   videoRef.current.play();
+    //   setIsPlaying(true);
+    // } else {
+    //   videoRef?.current?.pause();
+    //   setIsPlaying(false);
+    // }
   };
 
   const goFullscreen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -55,15 +69,15 @@ const VideoPlayer = (props: IVideoPlayer): JSX.Element => {
     if (videoRef.current) {
       if (videoRef.current.requestFullscreen) {
         videoRef.current.requestFullscreen();
+      } else if (videoRef?.current?.mozRequestFullScreen) {
+        videoRef.current.mozRequestFullScreen();
+      } else if (videoRef?.current?.webkitRequestFullscreen) {
+        videoRef.current?.webkitRequestFullscreen();
+      } else if (videoRef?.current?.msRequestFullscreen) {
+        videoRef.current?.msRequestFullscreen();
       }
     }
-    //   } else if (videoRef?.current?.mozRequestFullScreen) {
-    //     videoRef.current.mozRequestFullScreen();
-    //   } else if (videoRef?.current?.webkitRequestFullscreen) {
-    //     videoRef.current?.webkitRequestFullscreen();
-    //   } else if (videoRef?.current?.msRequestFullscreen) {
-    //     videoRef.current?.msRequestFullscreen();
-    //   }
+    setIsFullScreen(!isFullScreen);
   };
 
   const formatTime = (time: number) => {
@@ -79,19 +93,23 @@ const VideoPlayer = (props: IVideoPlayer): JSX.Element => {
       onClick={handlePlayPause}
     >
       <video
+        controls
         id="video-element"
         ref={videoRef}
         width={width}
         height={height}
         className="cursor-pointer"
       >
-        <source src={source} type="video/mp4" />
+        <source src={videoData.source} type="video/mp4" />
         <p>Your Browser does not support .mp4 video</p>
       </video>
+      <p>{videoData.title}</p>
       <button className="flex " onClick={handlePlayPause}>
         {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
       </button>
-      <button onClick={goFullscreen}> Full SCreen</button>
+      <button onClick={goFullscreen}>
+        {!isFullScreen ? <AiOutlineFullscreen /> : <AiOutlineFullscreenExit />}
+      </button>
       <div className="absolute bottom-0 right-0 p-2 bg-gray-800 text-white">
         {formatTime(currentTime)} / {formatTime(duration)}
       </div>
@@ -99,4 +117,4 @@ const VideoPlayer = (props: IVideoPlayer): JSX.Element => {
   );
 };
 
-export default VideoPlayer;
+export default Player;
