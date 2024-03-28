@@ -37,7 +37,6 @@ const Player = (props: IVideoPlayer): JSX.Element => {
       };
 
       const handleDurationChange = () => {
-        // TODO: Need to make it synchronous
         setDuration(videoElement.duration);
       };
 
@@ -55,13 +54,13 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   }, []);
 
   const handlePlayPause = () => {
-    // if (videoRef?.current?.paused) {
-    //   videoRef.current.play();
-    //   setIsPlaying(true);
-    // } else {
-    //   videoRef?.current?.pause();
-    //   setIsPlaying(false);
-    // }
+    if (videoRef?.current?.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef?.current?.pause();
+      setIsPlaying(false);
+    }
   };
 
   const goFullscreen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -88,31 +87,36 @@ const Player = (props: IVideoPlayer): JSX.Element => {
 
   return (
     <div
-      style={{ width: width + "px", height: "auto" }}
-      className={"relative"}
-      onClick={handlePlayPause}
+      style={{ width: "auto", height: "auto" }}
+      className="relative rounded-lg overflow-hidden shadow-lg"
     >
       <video
-        controls
         id="video-element"
         ref={videoRef}
         width={width}
         height={height}
-        className="cursor-pointer"
+        className="cursor-pointer w-full h-full object-cover"
       >
         <source src={videoData.source} type="video/mp4" />
         <p>Your Browser does not support .mp4 video</p>
       </video>
-      <p>{videoData.title}</p>
-      <button className="flex " onClick={handlePlayPause}>
-        {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
-      </button>
-      <button onClick={goFullscreen}>
-        {!isFullScreen ? <AiOutlineFullscreen /> : <AiOutlineFullscreenExit />}
-      </button>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <button
+          className="text-5xl text-white transition duration-300 ease-in-out hover:text-gray-300 focus:outline-none"
+          onClick={handlePlayPause}
+        >
+          {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
+        </button>
+      </div>
       <div className="absolute bottom-0 right-0 p-2 bg-gray-800 text-white">
         {formatTime(currentTime)} / {formatTime(duration)}
       </div>
+      <button
+        className="absolute bottom-0 right-0 p-2 text-white transition duration-300 ease-in-out hover:text-gray-300 focus:outline-none"
+        onClick={goFullscreen}
+      >
+        {!isFullScreen ? <AiOutlineFullscreen /> : <AiOutlineFullscreenExit />}
+      </button>
     </div>
   );
 };

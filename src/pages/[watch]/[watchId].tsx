@@ -19,14 +19,20 @@ export default function Watch({ videoData }: IWatch) {
   };
 
   return (
-    <div>
-      <Player
-        videoData={video.videoData}
-        width="500"
-        height="500"
-        id={video.videoData.id}
-      />
-      <Playlist videos={mediaJSON.videos} playVideo={handleClick} />
+    <div className="flex flex-col md:flex-row">
+      <div className="md:w-1/2 m-[20px]">
+        <Player
+          videoData={video.videoData}
+          width="800"
+          height="500"
+          id={video.videoData.id}
+        />
+        <p className="text-xl font-semibold mb-2">{video.videoData.title}</p>
+        <p className="text-gray-700">{video.videoData.description}</p>
+      </div>
+      <div className="md:w-1/2">
+        <Playlist videos={mediaJSON.videos} playVideo={handleClick} />
+      </div>
     </div>
   );
 }
