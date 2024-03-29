@@ -60,6 +60,9 @@ export default function Watch({ videoData }: IWatch) {
         <p className="font-semibold mb-2 text-2xl mt-2 md:text-3xl">
           {video.videoData.title}
         </p>
+        <p className="mb-2 text-md mt-2 md:text-xl">
+          {video.videoData.subtitle}
+        </p>
         <p className="text-gray-700">{video.videoData.description}</p>
       </div>
       <div className="md:w-1/2">

@@ -5,5 +5,6 @@ export interface IVideo {
   title: string;
   source: string;
   description: string;
+  subtitle: string;
   playOnClick?: (id: number) => void;
 }
