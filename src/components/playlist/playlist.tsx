@@ -3,29 +3,29 @@ import { IVideo } from "@vb/types/video";
 import Video from "../video/video";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import dynamic from "next/dynamic";
+import { usePlaylist } from "@vb/context/playlistProvider";
 const Droppable = dynamic(
   () => import("react-beautiful-dnd").then((res) => res.Droppable),
   { ssr: false }
 );
 
 interface IPlaylist {
-  videos: IVideo[];
   playVideo: (id: number) => void;
   onReorder?: (videos: IVideo[]) => void;
 }
 
 const Playlist = (props: IPlaylist): JSX.Element => {
-  const { videos, playVideo, onReorder } = props;
-  const [playlistVideos, setPlaylistVideos] = useState(videos);
+  const { playVideo, onReorder } = props;
+  const { playlist, setPlaylist } = usePlaylist();
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
-    const items = Array.from(playlistVideos);
+    const items = Array.from(playlist);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setPlaylistVideos(items);
+    setPlaylist(items);
     if (onReorder) onReorder(items);
   };
 
@@ -39,7 +39,7 @@ const Playlist = (props: IPlaylist): JSX.Element => {
         <Droppable droppableId="playlist">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {playlistVideos.map((video, index) => (
+              {playlist.map((video, index) => (
                 <Draggable
                   key={video.id}
                   draggableId={video.id.toString()}

@@ -1,6 +1,6 @@
 export class Utils {
   static isBrowser() {
-    return window !== undefined;
+    return typeof window !== "undefined";
   }
 
   static getAssetPath(path: string) {

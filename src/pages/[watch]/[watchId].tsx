@@ -5,6 +5,8 @@ import Router from "next/router";
 import Playlist from "@vb/components/playlist/playlist";
 import { IVideo } from "@vb/types/video";
 import { useRouter } from "next/router";
+import { usePlaylist } from "@vb/context/playlistProvider";
+import { Utils } from "@vb/utils/utils";
 
 interface IWatch {
   videoData: IVideo;
@@ -13,26 +15,36 @@ interface IWatch {
 export default function Watch({ videoData }: IWatch) {
   const router = useRouter();
   const [video, setVideo] = useState({ videoData });
-  const [playlistVideos, setPlaylistVideos] = useState<IVideo[]>(
-    mediaJSON.videos
-  );
+  const { playlist, setPlaylist } = usePlaylist();
 
   const handleClick = async (id: number) => {
     const newVideoData = mediaJSON.videos[id - 1];
     setVideo({ videoData: newVideoData });
     await router.push(`/watch/${newVideoData.id}`);
-    router.reload();
+    window.location.reload();
   };
 
-  const handleVideoEnd = () => {
+  const getNextVideo = (currentVideoIndex: number): number => {
+    const currentIndexInPlaylist = playlist.findIndex(
+      (video) => video.id === currentVideoIndex
+    );
+
+    if (currentIndexInPlaylist === -1) return 1;
+
+    const nextIndex = (currentIndexInPlaylist + 1) % playlist.length;
+    return playlist[nextIndex].id;
+  };
+
+  const handleVideoEnd = async () => {
     const currentVideoIndex = video.videoData.id;
-    const nextVideoIndex = (currentVideoIndex % mediaJSON.videos.length) + 1;
-    router.push(`/watch/${nextVideoIndex - 1}`);
-    router.reload();
+
+    const nextVideoIndex = getNextVideo(currentVideoIndex);
+    await router.push(`/watch/${nextVideoIndex}`);
+    window.location.reload();
   };
 
   const handleReorder = (updatedPlaylist: IVideo[]) => {
-    setPlaylistVideos(updatedPlaylist);
+    setPlaylist(updatedPlaylist);
   };
 
   return (
@@ -45,15 +57,13 @@ export default function Watch({ videoData }: IWatch) {
           id={video.videoData.id}
           onVideoEnd={handleVideoEnd}
         />
-        <p className="text-xl font-semibold mb-2">{video.videoData.title}</p>
+        <p className="font-semibold mb-2 text-2xl mt-2 md:text-3xl">
+          {video.videoData.title}
+        </p>
         <p className="text-gray-700">{video.videoData.description}</p>
       </div>
       <div className="md:w-1/2">
-        <Playlist
-          videos={playlistVideos}
-          playVideo={handleClick}
-          onReorder={handleReorder}
-        />
+        <Playlist playVideo={handleClick} onReorder={handleReorder} />
       </div>
     </div>
   );
