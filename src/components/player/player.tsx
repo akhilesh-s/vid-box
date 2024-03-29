@@ -12,6 +12,7 @@ interface IVideoPlayer {
   width: string;
   height: string;
   id?: number;
+  onVideoEnd: () => void;
 }
 
 interface HTMLVideoElementRef extends HTMLVideoElement {
@@ -21,7 +22,7 @@ interface HTMLVideoElementRef extends HTMLVideoElement {
 }
 
 const Player = (props: IVideoPlayer): JSX.Element => {
-  const { videoData, width, height } = props;
+  const { videoData, width, height, onVideoEnd } = props;
   const videoRef = useRef<HTMLVideoElementRef | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -85,38 +86,47 @@ const Player = (props: IVideoPlayer): JSX.Element => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  const handleVideoEnd = () => {
+    // Call the provided callback function to autoplay the next video
+    if (onVideoEnd) {
+      onVideoEnd();
+    }
+  };
+
   return (
     <div
       style={{ width: "auto", height: "auto" }}
       className="relative rounded-lg overflow-hidden shadow-lg"
     >
       <video
+        controls
         id="video-element"
         ref={videoRef}
         width={width}
         height={height}
         className="cursor-pointer w-full h-full object-cover"
+        onEnded={handleVideoEnd}
       >
         <source src={videoData.source} type="video/mp4" />
         <p>Your Browser does not support .mp4 video</p>
       </video>
-      <div className="absolute inset-0 flex items-center justify-center">
+      {/* <div className="absolute inset-0 flex items-center justify-center">
         <button
           className="text-5xl text-white transition duration-300 ease-in-out hover:text-gray-300 focus:outline-none"
           onClick={handlePlayPause}
         >
           {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
         </button>
-      </div>
-      <div className="absolute bottom-0 right-0 p-2 bg-gray-800 text-white">
+      </div> */}
+      {/* <div className="absolute bottom-0 right-0 p-2 bg-gray-800 text-white">
         {formatTime(currentTime)} / {formatTime(duration)}
-      </div>
-      <button
+      </div> */}
+      {/* <button
         className="absolute bottom-0 right-0 p-2 text-white transition duration-300 ease-in-out hover:text-gray-300 focus:outline-none"
         onClick={goFullscreen}
       >
         {!isFullScreen ? <AiOutlineFullscreen /> : <AiOutlineFullscreenExit />}
-      </button>
+      </button> */}
     </div>
   );
 };
