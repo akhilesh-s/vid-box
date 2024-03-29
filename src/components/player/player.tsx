@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { usePlaylist } from "@vb/context/playlistProvider";
 import { IVideo } from "@vb/types/video";
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -11,7 +12,6 @@ import {
   BsFillVolumeMuteFill,
   BsFillVolumeUpFill,
   BsFillVolumeDownFill,
-  BsSpeedometer2,
 } from "react-icons/bs";
 
 interface IVideoPlayer {
@@ -28,15 +28,6 @@ interface HTMLVideoElementRef extends HTMLVideoElement {
   msRequestFullscreen?: () => Promise<void>;
 }
 
-// interface Document {
-//   exitFullscreen: any;
-//   mozCancelFullScreen: any;
-//   webkitExitFullscreen: any;
-//   fullscreenElement: any;
-//   mozFullScreenElement: any;
-//   webkitFullscreenElement: any;
-// }
-
 declare global {
   interface Document {
     mozCancelFullScreen?: () => Promise<void>;
@@ -51,6 +42,7 @@ declare global {
 const Player = (props: IVideoPlayer): JSX.Element => {
   const { videoData, width, height, onVideoEnd } = props;
   const videoRef = useRef<HTMLVideoElementRef | null>(null);
+  const { playlist, setPlaylist } = usePlaylist();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -118,7 +110,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   const toggleMute = () => {
     setIsMuted(!isMuted);
     if (isMuted) {
-      setVolume(100); // Unmute sets volume to maximum
+      setVolume(100);
     }
   };
 
@@ -160,16 +152,28 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   }, [playbackSpeed]);
 
   useEffect(() => {
+    console.log("prog", progress);
+    const updatedPlaylistWithProgress = playlist.map((video) => {
+      if (video.id === videoData.id) {
+        return { ...video, progress };
+      }
+      return video;
+    });
+    console.log("updated", updatedPlaylistWithProgress);
+    setPlaylist(updatedPlaylistWithProgress);
+  }, [progress]);
+
+  useEffect(() => {
     const handleKeyboardEvents = (event: KeyboardEvent) => {
       switch (event.key) {
         case "Space":
           handlePlayPause();
           break;
         case "ArrowRight":
-          skipTime(10); // Skip 10 seconds forward
+          skipTime(10);
           break;
         case "ArrowLeft":
-          skipTime(-10); // Skip 10 seconds backward
+          skipTime(-10);
           break;
         case "ArrowUp":
           increaseVolume();
@@ -224,13 +228,17 @@ const Player = (props: IVideoPlayer): JSX.Element => {
 
   const handleProgress = (e: React.ChangeEvent<HTMLVideoElement>) => {
     const percentage = (e.target.currentTime / e.target.duration) * 100;
+
     setProgress(percentage);
   };
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = (parseFloat(e.target.value) * duration) / 100;
-    setCurrentTime(newTime);
+  const handleSliderChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const newTime = (parseFloat(e.target.value) * duration) / 100;
+    setIsPlaying(false);
+    const newTime = parseFloat(e.target.value);
+    await setCurrentTime(newTime);
     if (videoRef.current) videoRef.current.currentTime = newTime;
+    setIsPlaying(true);
   };
 
   const getVolumeIcon = (): JSX.Element => {
@@ -292,6 +300,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
             <input
               id="default-range"
               type="range"
+              step={1}
               className="w-full h-2 bg-gray-200 rounded-lg  cursor-pointer dark:bg-gray-700"
               max={100}
               value={progress}

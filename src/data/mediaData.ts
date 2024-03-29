@@ -10,6 +10,7 @@ export const mediaJSON = {
       subtitle: "By Blender Foundation",
       thumb: "images/BigBuckBunny.jpg",
       title: "Big Buck Bunny",
+      progress: 0,
     },
     {
       id: 2,
@@ -20,6 +21,7 @@ export const mediaJSON = {
       subtitle: "By Blender Foundation",
       thumb: "images/ElephantsDream.jpg",
       title: "Elephant Dream",
+    progress: 0,
     },
     {
       id: 3,
@@ -31,6 +33,7 @@ export const mediaJSON = {
       subtitle: "By Google",
       thumb: "images/ForBiggerBlazes.jpg",
       title: "For Bigger Blazes",
+      progress: 0,
     },
     {
       id: 4,
@@ -42,6 +45,7 @@ export const mediaJSON = {
       subtitle: "By Google",
       thumb: "images/ForBiggerEscapes.jpg",
       title: "For Bigger Escape",
+      progress: 0,
     },
     {
       id: 5,
@@ -53,6 +57,7 @@ export const mediaJSON = {
       subtitle: "By Google",
       thumb: "images/ForBiggerFun.jpg",
       title: "For Bigger Fun",
+      progress: 0,
     },
     {
       id: 6,
@@ -64,6 +69,7 @@ export const mediaJSON = {
       subtitle: "By Google",
       thumb: "images/ForBiggerJoyrides.jpg",
       title: "For Bigger Joyrides",
+      progress: 0,
     },
     {
       id: 7,
@@ -75,6 +81,7 @@ export const mediaJSON = {
       subtitle: "By Google",
       thumb: "images/ForBiggerMeltdowns.jpg",
       title: "For Bigger Meltdowns",
+      progress: 0,
     },
     {
       id: 8,
@@ -86,6 +93,7 @@ export const mediaJSON = {
       subtitle: "By Blender Foundation",
       thumb: "images/Sintel.jpg",
       title: "Sintel",
+      progress: 0,
     },
     {
       id: 9,
@@ -97,6 +105,7 @@ export const mediaJSON = {
       subtitle: "By Garage419",
       thumb: "images/SubaruOutbackOnStreetAndDirt.jpg",
       title: "Subaru Outback On Street And Dirt",
+      progress: 0,
     },
     {
       id: 10,
@@ -108,6 +117,7 @@ export const mediaJSON = {
       subtitle: "By Blender Foundation",
       thumb: "images/TearsOfSteel.jpg",
       title: "Tears of Steel",
+      progress: 0,
     },
     {
       id: 11,
@@ -119,6 +129,7 @@ export const mediaJSON = {
       subtitle: "By Garage419",
       thumb: "images/VolkswagenGTIReview.jpg",
       title: "Volkswagen GTI Review",
+      progress: 0,
     },
     {
       id: 12,
@@ -130,6 +141,7 @@ export const mediaJSON = {
       subtitle: "By Garage419",
       thumb: "images/WeAreGoingOnBullrun.jpg",
       title: "We Are Going On Bullrun",
+      progress: 0,
     },
     {
       id: 13,
@@ -141,6 +153,7 @@ export const mediaJSON = {
       subtitle: "By Garage419",
       thumb: "images/WhatCarCanYouGetForAGrand.jpg",
       title: "What care can you get for a grand?",
+      progress: 0,
     },
   ],
 };

@@ -7,4 +7,5 @@ export interface IVideo {
   description: string;
   subtitle: string;
   playOnClick?: (id: number) => void;
+  progress?: number;
 }

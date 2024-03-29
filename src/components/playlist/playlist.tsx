@@ -4,6 +4,7 @@ import Video from "../video/video";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import dynamic from "next/dynamic";
 import { usePlaylist } from "@vb/context/playlistProvider";
+
 const Droppable = dynamic(
   () => import("react-beautiful-dnd").then((res) => res.Droppable),
   { ssr: false }
