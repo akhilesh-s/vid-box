@@ -52,6 +52,7 @@ const Playlist = (props: IPlaylist): JSX.Element => {
                       {...provided.dragHandleProps}
                     >
                       <Video
+                        subtitle={video.subtitle}
                         id={video.id}
                         thumb={video.thumb}
                         source={video.source}
