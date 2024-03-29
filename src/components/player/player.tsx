@@ -219,7 +219,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   };
 
   const handleMouseExit = () => {
-    setShowControls(true);
+    setShowControls(false);
   };
 
   const handleProgress = (e: React.ChangeEvent<HTMLVideoElement>) => {
@@ -325,6 +325,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
             <div className="relative">
               <select
                 onChange={handleChange}
+                value={playbackSpeed}
                 className="rounded bg-slate-600 text-white"
               >
                 {options.map((option) => (
