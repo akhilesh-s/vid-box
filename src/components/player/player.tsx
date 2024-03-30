@@ -49,9 +49,18 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(true);
+  const [volume, setVolume] = useState(isMuted ? 0 : 100);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
+
+  const options = [
+    { value: 0.5, label: "0.5x" },
+    { value: 0.75, label: "0.75x" },
+    { value: 1, label: "1x" },
+    { value: 1.25, label: "1.25x" },
+    { value: 1.5, label: "1.5x" },
+    { value: 2, label: "2x" },
+  ];
 
   const handlePlayPause = () => {
     if (videoRef?.current?.paused) {
@@ -112,6 +121,66 @@ const Player = (props: IVideoPlayer): JSX.Element => {
     if (isMuted) {
       setVolume(100);
     }
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  const handleVideoEnd = () => {
+    if (onVideoEnd) {
+      const updatedPlaylistWithProgress = playlist.map((video) => {
+        if (video.id === videoData.id) {
+          return { ...video, progress: 0 };
+        }
+        return video;
+      });
+
+      setPlaylist(updatedPlaylistWithProgress);
+      onVideoEnd();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setShowControls(true);
+  };
+
+  const handleMouseExit = () => {
+    setShowControls(false);
+  };
+
+  const handleProgress = (e: React.ChangeEvent<HTMLVideoElement>) => {
+    const percentage = e.target.currentTime;
+
+    setProgress(percentage);
+  };
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const newTime = (parseFloat(e.target.value) * duration) / 100;
+
+    setIsPlaying(false);
+    const newTime = parseFloat(e.target.value);
+
+    setCurrentTime(newTime);
+    if (videoRef.current) videoRef.current.currentTime = newTime;
+    setIsPlaying(true);
+  };
+
+  const getVolumeIcon = (): JSX.Element => {
+    if (isMuted || volume === 0) return <BsFillVolumeMuteFill />;
+    if (volume < 50) return <BsFillVolumeDownFill />;
+    return <BsFillVolumeUpFill />;
+  };
+
+  const handlePlaybackSpeedChange = (speed: number) => {
+    setPlaybackSpeed(speed);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSpeed = parseFloat(e.target.value);
+    handlePlaybackSpeedChange(selectedSpeed);
   };
 
   useEffect(() => {
@@ -220,75 +289,6 @@ const Player = (props: IVideoPlayer): JSX.Element => {
     toggleMute,
     goFullscreen,
   ]);
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
-
-  const handleVideoEnd = () => {
-    if (onVideoEnd) {
-      const updatedPlaylistWithProgress = playlist.map((video) => {
-        if (video.id === videoData.id) {
-          return { ...video, progress: 0 };
-        }
-        return video;
-      });
-
-      setPlaylist(updatedPlaylistWithProgress);
-      onVideoEnd();
-    }
-  };
-
-  const handleMouseEnter = () => {
-    setShowControls(true);
-  };
-
-  const handleMouseExit = () => {
-    setShowControls(false);
-  };
-
-  const handleProgress = (e: React.ChangeEvent<HTMLVideoElement>) => {
-    const percentage = e.target.currentTime;
-
-    setProgress(percentage);
-  };
-
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const newTime = (parseFloat(e.target.value) * duration) / 100;
-
-    setIsPlaying(false);
-    const newTime = parseFloat(e.target.value);
-
-    setCurrentTime(newTime);
-    if (videoRef.current) videoRef.current.currentTime = newTime;
-    setIsPlaying(true);
-  };
-
-  const getVolumeIcon = (): JSX.Element => {
-    if (isMuted || volume === 0) return <BsFillVolumeMuteFill />;
-    if (volume < 50) return <BsFillVolumeDownFill />;
-    return <BsFillVolumeUpFill />;
-  };
-
-  const handlePlaybackSpeedChange = (speed: number) => {
-    setPlaybackSpeed(speed);
-  };
-
-  const options = [
-    { value: 0.5, label: "0.5x" },
-    { value: 0.75, label: "0.75x" },
-    { value: 1, label: "1x" },
-    { value: 1.25, label: "1.25x" },
-    { value: 1.5, label: "1.5x" },
-    { value: 2, label: "2x" },
-  ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedSpeed = parseFloat(e.target.value);
-    handlePlaybackSpeedChange(selectedSpeed);
-  };
 
   return (
     <div
