@@ -49,7 +49,7 @@ export default function Watch({ videoData }: IWatch) {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="md:w-1/2 m-[20px]">
+      <div className="lg:w-2/3 md:w-1/2 m-[20px]">
         <Player
           videoData={video.videoData}
           width="800"
@@ -65,7 +65,7 @@ export default function Watch({ videoData }: IWatch) {
         </p>
         <p className="text-gray-700">{video.videoData.description}</p>
       </div>
-      <div className="md:w-1/2">
+      <div className="md:w-1/2 lg:w-1/3">
         <Playlist playVideo={handleClick} onReorder={handleReorder} />
       </div>
     </div>

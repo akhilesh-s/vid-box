@@ -42,7 +42,7 @@ declare global {
 const Player = (props: IVideoPlayer): JSX.Element => {
   const { videoData, width, height, onVideoEnd } = props;
   const videoRef = useRef<HTMLVideoElementRef | null>(null);
-  const { playlist, setPlaylist, autoplay, setAutoplay } = usePlaylist();
+  const { playlist, setPlaylist, autoplay } = usePlaylist();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -121,11 +121,11 @@ const Player = (props: IVideoPlayer): JSX.Element => {
       const handleTimeUpdate = () => {
         setCurrentTime(videoElement.currentTime);
         setDuration(videoElement.duration);
-        console.log("duration", duration);
       };
 
       const handleDurationChange = async () => {
         setDuration(videoElement.duration);
+        // if (videoData.progress) setCurrentTime(videoData.progress);
       };
 
       videoElement.addEventListener("timeupdate", handleTimeUpdate);
@@ -161,16 +161,16 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   }, [autoplay]);
 
   useEffect(() => {
-    // console.log("prog", progress);
-    const updatedPlaylistWithProgress = playlist.map((video) => {
-      if (video.id === videoData.id) {
-        return { ...video, progress };
-      }
-      return video;
-    });
-    // console.log("updated", updatedPlaylistWithProgress);
-    // setIsMuted(false);
-    setPlaylist(updatedPlaylistWithProgress);
+    setTimeout(() => {
+      const updatedPlaylistWithProgress = playlist.map((video) => {
+        if (video.id === videoData.id) {
+          return { ...video, progress };
+        }
+        return video;
+      });
+
+      setPlaylist(updatedPlaylistWithProgress);
+    }, 10000);
   }, [progress]);
 
   useEffect(() => {
@@ -229,6 +229,14 @@ const Player = (props: IVideoPlayer): JSX.Element => {
 
   const handleVideoEnd = () => {
     if (onVideoEnd) {
+      const updatedPlaylistWithProgress = playlist.map((video) => {
+        if (video.id === videoData.id) {
+          return { ...video, progress: 0 };
+        }
+        return video;
+      });
+
+      setPlaylist(updatedPlaylistWithProgress);
       onVideoEnd();
     }
   };

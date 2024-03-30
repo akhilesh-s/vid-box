@@ -12,7 +12,7 @@ const Video = (props: IVideo) => {
   };
 
   return (
-    <div className="w-auto m-[20px] flex items-center p-4 [box-shadow:rgba(0,_0,_0,_0.12)_0px_1px_3px,_rgba(0,_0,_0,_0.24)_0px_1px_2px] hover:shadow-lg">
+    <div className="w-auto m-[20px] flex items-center p-4 [box-shadow:rgba(0,_0,_0,_0.12)_0px_1px_3px,_rgba(0,_0,_0,_0.24)_0px_1px_2px] hover:shadow-lg border-r-4">
       <div style={{ fontSize: "40px" }}>
         <BsGripVertical />
       </div>
