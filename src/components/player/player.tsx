@@ -176,7 +176,8 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   useEffect(() => {
     const handleKeyboardEvents = (event: KeyboardEvent) => {
       switch (event.key) {
-        case "Space":
+        case " ":
+          event.preventDefault();
           handlePlayPause();
           break;
         case "ArrowRight":
@@ -186,15 +187,19 @@ const Player = (props: IVideoPlayer): JSX.Element => {
           skipTime(-10);
           break;
         case "ArrowUp":
+          event.preventDefault();
           increaseVolume();
           break;
         case "ArrowDown":
+          event.preventDefault();
           decreaseVolume();
           break;
+        case "f":
         case "F":
           goFullscreen();
           break;
         case "M":
+        case "m":
           toggleMute();
           break;
         default:
