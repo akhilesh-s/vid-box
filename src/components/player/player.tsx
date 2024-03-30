@@ -42,7 +42,7 @@ declare global {
 const Player = (props: IVideoPlayer): JSX.Element => {
   const { videoData, width, height, onVideoEnd } = props;
   const videoRef = useRef<HTMLVideoElementRef | null>(null);
-  const { playlist, setPlaylist } = usePlaylist();
+  const { playlist, setPlaylist, autoplay, setAutoplay } = usePlaylist();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -50,7 +50,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   const [showControls, setShowControls] = useState(true);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(100);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
   const handlePlayPause = () => {
@@ -120,9 +120,11 @@ const Player = (props: IVideoPlayer): JSX.Element => {
     if (videoElement) {
       const handleTimeUpdate = () => {
         setCurrentTime(videoElement.currentTime);
+        setDuration(videoElement.duration);
+        console.log("duration", duration);
       };
 
-      const handleDurationChange = () => {
+      const handleDurationChange = async () => {
         setDuration(videoElement.duration);
       };
 
@@ -152,14 +154,22 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   }, [playbackSpeed]);
 
   useEffect(() => {
-    console.log("prog", progress);
+    if (autoplay) {
+      videoRef.current?.play();
+      setIsPlaying(true);
+    }
+  }, [autoplay]);
+
+  useEffect(() => {
+    // console.log("prog", progress);
     const updatedPlaylistWithProgress = playlist.map((video) => {
       if (video.id === videoData.id) {
         return { ...video, progress };
       }
       return video;
     });
-    console.log("updated", updatedPlaylistWithProgress);
+    // console.log("updated", updatedPlaylistWithProgress);
+    // setIsMuted(false);
     setPlaylist(updatedPlaylistWithProgress);
   }, [progress]);
 
@@ -227,16 +237,18 @@ const Player = (props: IVideoPlayer): JSX.Element => {
   };
 
   const handleProgress = (e: React.ChangeEvent<HTMLVideoElement>) => {
-    const percentage = (e.target.currentTime / e.target.duration) * 100;
+    const percentage = e.target.currentTime;
 
     setProgress(percentage);
   };
 
-  const handleSliderChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // const newTime = (parseFloat(e.target.value) * duration) / 100;
+
     setIsPlaying(false);
     const newTime = parseFloat(e.target.value);
-    await setCurrentTime(newTime);
+
+    setCurrentTime(newTime);
     if (videoRef.current) videoRef.current.currentTime = newTime;
     setIsPlaying(true);
   };
@@ -282,6 +294,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
         onTimeUpdate={handleProgress}
         className="cursor-pointer w-full h-full object-cover"
         onEnded={handleVideoEnd}
+        autoPlay
       >
         <source src={videoData.source} type="video/mp4" />
         <p>Your Browser does not support .mp4 video</p>
@@ -302,7 +315,7 @@ const Player = (props: IVideoPlayer): JSX.Element => {
               type="range"
               step={1}
               className="w-full h-2 bg-gray-200 rounded-lg  cursor-pointer dark:bg-gray-700"
-              max={100}
+              max={duration}
               value={progress}
               onChange={handleSliderChange}
             ></input>
