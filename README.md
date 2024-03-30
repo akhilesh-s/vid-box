@@ -3,6 +3,38 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 # Live URl
 https://vid-box-nedb.vercel.app/
 
+# Video Player Key functionality Included
+- Custom Video Player
+- Play/Pause
+- Seek
+- Current Time / Duration
+- Autplay
+- Speed Selector
+- Volume Change Option
+- Fullscreen option
+- Keyboard functionality - Space for Pause/Play, Skip 10 sec with ArrowForward and viceversa, Mute with M, Full Screen with F
+- Responsive 
+
+# Playlist Key functionality Included
+- Reorder Playlist
+- Playlist order sync across tabs using localstorage
+- Load Video on Click
+
+# Additional
+- Utilized NextJS getServerSideProps for SSR, although this was static data could have utilized getStaticProps but keeping in mind ar large scale, getServerSideProps is better option
+- Utilized TailwindCSS
+- Utilized Context to manage state of playlst at root level and sync across tabs
+- Clean Code Structure
+
+
+# Lighthouse report
+- Desktop
+ ![image](https://github.com/akhilesh-s/vid-box/assets/42044519/55768bd2-095d-4abc-8f70-063f50e7c08e)
+- Mobile
+- ![image](https://github.com/akhilesh-s/vid-box/assets/42044519/9ada66d7-9892-47fc-8b36-0ccb51db3079)
+
+
+
 ## Getting Started
 
 First, run the development server:
