@@ -1,0 +1,35 @@
+name: Check Old PRs and Notify Slack
+
+on:
+  schedule:
+    - cron: "* * * * *" # Runs every minute for testing purposes; adjust as needed.
+
+jobs:
+  notify-old-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Clone Watchdog Repo
+        run: git clone https://github.com/akhilesh-s/watchdog.git
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: |
+          cd watchdog
+          npm install
+
+      - name: Execute Script
+        run: |
+          cd watchdog
+          node src/index.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/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"
+          REPO: "notes-nest-client"
+          OWNER: "akhilesh-s"
