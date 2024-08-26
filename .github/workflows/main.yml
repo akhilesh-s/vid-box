@@ -29,7 +29,7 @@ jobs:
           cd watchdog
           node src/index.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/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"
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           REPO: "notes-nest-client"
           OWNER: "akhilesh-s"
