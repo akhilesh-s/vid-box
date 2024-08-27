@@ -14,6 +14,10 @@ jobs:
         with:
           repository: akhilesh-s/watchdog # Specify the repository to checkout
           path: watchdog # Clone the repo into the 'watchdog' folder
+          OWNER: "akhilesh-s"
+          REPO: "notes-nest-client"
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
