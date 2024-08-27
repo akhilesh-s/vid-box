@@ -3,21 +3,17 @@ name: Check Old PRs and Notify Slack
 on:
   schedule:
     - cron: "* * * * *" # Runs every minute for testing purposes; adjust as needed.
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   notify-old-prs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Watchdog Repository
         uses: actions/checkout@v2
-
-      - name: Clone Watchdog Repo
-        uses: akhilesh-s/watchdog@master
         with:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          REPO: "notes-nest-client"
-          OWNER: "akhilesh-s"
+          repository: akhilesh-s/watchdog # Specify the repository to checkout
+          path: watchdog # Clone the repo into the 'watchdog' folder
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -34,7 +30,7 @@ jobs:
           cd watchdog
           node src/index.js
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          REPO: "notes-nest-client"
           OWNER: "akhilesh-s"
+          REPO: "notes-nest-client"
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
