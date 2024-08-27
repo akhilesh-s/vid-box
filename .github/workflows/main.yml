@@ -13,6 +13,11 @@ jobs:
 
       - name: Clone Watchdog Repo
         uses: akhilesh-s/watchdog@master
+        with:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REPO: "notes-nest-client"
+          OWNER: "akhilesh-s"
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
