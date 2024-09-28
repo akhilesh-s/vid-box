@@ -2,8 +2,8 @@ name: Check Old PRs and Notify Slack
 
 on:
   schedule:
-    - cron: "* * * * *" # Runs every minute for testing purposes; adjust as needed.
-  workflow_dispatch: # Allows manual triggering of the workflow
+    - cron: "0 9 * * 1-5"
+  workflow_dispatch:
 
 jobs:
   notify-old-prs:
@@ -12,12 +12,8 @@ jobs:
       - name: Checkout Watchdog Repository
         uses: actions/checkout@v2
         with:
-          repository: akhilesh-s/watchdog # Specify the repository to checkout
-          path: watchdog # Clone the repo into the 'watchdog' folder
-          OWNER: "akhilesh-s"
-          REPO: "notes-nest-client"
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          repository: akhilesh-s/watchdog
+          path: watchdog
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -35,6 +31,17 @@ jobs:
           node src/index.js
         env:
           OWNER: "akhilesh-s"
-          REPO: "notes-nest-client"
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO: "[vid-box, notes-nest-client, watchdog]"
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # generate webhook url for a specific channel
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # generate github token (PAT)
+          GITHUB_TO_SLACK_MAP: |
+            akiresu-sama: U07F9A80URY
+            Harkarman: D07FND7QWUA
+            aadilterngroup: D07HUS72N0J
+            akshayrao14: D07FG4D2Q4S
+            hritik-tern: D07FGDE5751
+            rahul-kamboj-tern: D07FL772E92
+            shadab-tern: D07FG9HQCHY
+            ShrutiKhatri826: D07FJMJBPRS
+            vaibhavp-tern: D07KPCELHLN
+            Yogesh-K-Tern: D07KT5A5P6Z
