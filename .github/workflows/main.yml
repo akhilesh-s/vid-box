@@ -31,7 +31,7 @@ jobs:
           npx tsx src/index.ts
         env:
           OWNER: "akhilesh-s"
-          REPO: "[vid-box, notes-nest-client, watchdog]"
+          REPO: '[vid-box, notes-nest-client, watchdog]'
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # generate webhook url for a specific channel
           GH_TOKEN: ${{ secrets.GH_TOKEN }} # generate github token (PAT)
           GITHUB_TO_SLACK_MAP: |
