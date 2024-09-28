@@ -28,7 +28,7 @@ jobs:
       - name: Execute Script
         run: |
           cd watchdog
-          node src/index.js
+          npx tsx src/index.ts
         env:
           OWNER: "akhilesh-s"
           REPO: "[vid-box, notes-nest-client, watchdog]"
